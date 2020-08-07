@@ -1,0 +1,26 @@
+services:
+  mysql:
+    container_name: symfony_mysql
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - .docker/data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: cauldron
+      MYSQL_USER: mish
+      MYSQL_PASSWORD: pass
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: always
+    env_file:
+      - .env
+    user: ${LOCAL_USER}
+  nginx:
+    image: nginx:1.15.3-alpine
+    restart: always
+    depends_on:
+      - php
