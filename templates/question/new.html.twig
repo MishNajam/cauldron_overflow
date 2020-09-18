@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block content_body %}
+
+    <h1>Ask a new question</h1>
+
+    {{ form_start(QuestionForm) }}
+        {{ form_widget(articleForm) }}
+    <button type="submit" class="btn-primary"> Create! </button>
+    {{ form_end(QuestionForm) }}
+
+{% endblock %}

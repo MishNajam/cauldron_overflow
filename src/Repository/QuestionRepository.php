@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,6 +29,11 @@ class QuestionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    private function addIsAskedQueryBuilder(QueryBuilder $qb): QueryBuilder
+    {
+        return $qb->andWhere('q.publishedAt IS NOT NULL');
     }
 
     // /**

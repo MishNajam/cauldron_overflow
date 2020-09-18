@@ -3,10 +3,13 @@
 
 namespace App\Controller;
 
+use App\Form\QuestionFormType;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Question;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -89,4 +92,25 @@ EOF
             'answers' => $answers,
         ]);
     }
+
+    /**
+     *  @Route("/questions/{slug}/vote", name="app_question_vote", methods="POST")
+     */
+    public function questionVote(Question $question, Request $request, EntityManagerInterface $entityManager)
+    {
+        $direction = $request->request->get('direction');
+
+        if ($direction === 'up') {
+            $question->upVote();
+        } elseif ($direction === 'down') {
+            $question->downVote();
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_question_show', [
+            'slug' => $question->getSlug()
+        ]);
+    }
+
 }
